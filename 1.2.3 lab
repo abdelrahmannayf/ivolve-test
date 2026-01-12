@@ -1,0 +1,64 @@
+# Labs 1 & 2 Commands
+
+# =======================
+# Lab 1: Gradle
+# =======================
+
+sudo apt update
+sudo apt install gradle -y
+gradle -v
+
+git clone https://github.com/Ibrahim-Adel15/build1.git
+cd build1
+
+gradle test
+gradle build
+
+java -jar build/libs/ivolve-app.jar
+curl http://localhost:8080
+
+cd ..
+
+# =======================
+# Lab 2: Maven
+# =======================
+
+sudo apt update
+sudo apt install maven -y
+mvn -v
+
+git clone https://github.com/Ibrahim-Adel15/build2.git
+cd build2
+
+mvn test
+mvn package
+
+java -jar target/hello-ivolve-1.0-SNAPSHOT.jar
+curl http://localhost:8080
+
+# Lab 3: Run Java Spring Boot App in a Container
+
+## Commands
+
+# 1️⃣ Clone the Application
+git clone https://github.com/Ibrahim-Adel15/Docker-1.git && cd Docker-1
+
+# 2️⃣ Create Dockerfile
+echo "FROM maven:3.9.0-eclipse-temurin-17
+WORKDIR /app
+COPY . /app
+RUN mvn package
+EXPOSE 8080
+CMD [\"java\", \"-jar\", \"target/demo-0.0.1-SNAPSHOT.jar\"]" > Dockerfile
+
+# 3️⃣ Build Docker Image
+docker build -t app1 .
+
+# 4️⃣ Run Container from Image
+docker run -d -p 8080:8080 --name container1 app1
+
+# 5️⃣ Test Application
+curl http://localhost:8080
+
+# 6️⃣ Stop and Remove Container
+docker stop container1 && docker rm container1
