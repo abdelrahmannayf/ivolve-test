@@ -1,0 +1,90 @@
+# ===============================
+# Containerization with Docker
+# Lab 4 & Lab 5 Solution
+# ===============================
+
+
+# -------- Lab 4 --------
+# Run Java Spring Boot App in a Container
+
+
+# 1) Clone Repository
+git clone https://github.com/Ibrahim-Adel15/Docker-1.git
+cd Docker-1
+
+
+# 2) Build Application (Generate JAR)
+mvn clean package
+
+
+# 3) Dockerfile (Single Stage)
+# ============================
+# FROM openjdk:17-jdk-slim
+# WORKDIR /app
+# COPY target/demo-0.0.1-SNAPSHOT.jar app.jar
+# EXPOSE 8080
+# CMD ["java", "-jar", "app.jar"]
+# ============================
+
+
+# 4) Build Image (app2)
+docker build -t app2 .
+
+
+# Check Image Size
+docker images app2
+
+
+# 5) Run Container
+docker run -d -p 8080:8080 --name container2 app2
+
+
+# 6) Test Application
+curl http://localhost:8080
+# OR open browser: http://localhost:8080
+
+
+# 7) Stop & Delete Container
+docker stop container2
+docker rm container2
+
+
+
+# -------- Lab 5 --------
+# Multi-Stage Build (Java - Maven)
+
+
+# Dockerfile (Multi-Stage)
+# ============================
+# FROM maven:3.9.6-eclipse-temurin-17 AS builder
+# WORKDIR /build
+# COPY . .
+# RUN mvn clean package
+#
+# FROM openjdk:17-jdk-slim
+# WORKDIR /app
+# COPY --from=builder /build/target/demo-0.0.1-SNAPSHOT.jar app.jar
+# EXPOSE 8080
+# CMD ["java", "-jar", "app.jar"]
+# ============================
+
+
+# 1) Build Image (app3)
+docker build -t app3 .
+
+
+# Check Image Size
+docker images app3
+
+
+# 2) Run Container
+docker run -d -p 8080:8080 --name container3 app3
+
+
+# 3) Test Application
+curl http://localhost:8080
+
+
+# 4) Stop & Delete Container
+docker stop container3
+docker rm container3
