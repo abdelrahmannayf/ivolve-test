@@ -33,5 +33,5 @@ docker rm nginx-lab7
 
 # 10) Delete the volume
 docker volume rm nginx_logs
- ![Step 1](Screenshots/lap71.jpg)
-![Step 2](Screenshots/lap72.jpg)
+ ![Step 1](screenshots/lap71.jpg)
+![Step 2](screenshots/lap72.jpg)
