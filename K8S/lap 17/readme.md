@@ -1,5 +1,5 @@
+![Step 1](Screenshots/Screenshot 2026-02-05 203829.png) 
 
-![step1]{Screenshots/Screenshot 2026-02-05 203829.png}
 # Lab 17: Pod Resource Management with CPU and Memory Requests and Limits
 
 ## Objective
