@@ -1,6 +1,5 @@
-![step1]{Screenshots/lap191.png}
-![step1]{Screenshots/lap19.png}
-تمام، هعمللك README جاهز للـ Lab 19 باللي انت عملته بالترتيب وبشكل مرتب للتقرير:
+![step1](Screenshots/lap191.png)
+![step1]({Screenshots/lap19.png)
 
 ---
 
