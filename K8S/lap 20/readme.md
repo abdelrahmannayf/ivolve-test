@@ -1,5 +1,7 @@
 
 ![step](Screenshots/lap20.png)
+
+
 Lab 20: Securing Kubernetes with RBAC and Service Accounts
 📌 Objective
 
