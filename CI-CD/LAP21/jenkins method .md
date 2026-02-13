@@ -1,4 +1,4 @@
-![step final](screenshots/221.png)
+![step final](screenshots/212.png)
 
 Step 1: Plugin Installation
 From the Jenkins Dashboard, navigate to Manage Jenkins.
