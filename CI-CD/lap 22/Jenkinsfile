@@ -1,10 +1,10 @@
-
 pipeline {
     agent any
 
     environment {
         DOCKER_IMAGE = "abdelrahmannayf/jenkins-app"
         IMAGE_TAG = "${BUILD_NUMBER}"
+        // المسار النسبي للملف من روت الريبو
         DEPLOYMENT_FILE = "CI-CD/lap 22/deployment.yaml"
     }
 
@@ -15,29 +15,35 @@ pipeline {
     stages {
         stage('Run Unit Test') {
             steps {
-                sh 'mvn test'
+                dir('CI-CD/lap 22') {
+                    sh 'mvn test'
+                }
             }
         }
 
         stage('Build App') {
             steps {
-                sh 'mvn clean package -DskipTests'
+                dir('CI-CD/lap 22') {
+                    sh 'mvn clean package -DskipTests'
+                }
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh "docker build -t ${DOCKER_IMAGE}:${IMAGE_TAG} ."
+                dir('CI-CD/lap 22') {
+                    sh "docker build -t ${DOCKER_IMAGE}:${IMAGE_TAG} ."
+                }
             }
         }
 
         stage('Push Docker Image') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-cred', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
-                    sh '''
-                    echo $PASS | docker login -u $USER --password-stdin
+                    sh """
+                    echo \$PASS | docker login -u \$USER --password-stdin
                     docker push ${DOCKER_IMAGE}:${IMAGE_TAG}
-                    '''
+                    """
                 }
             }
         }
@@ -50,15 +56,16 @@ pipeline {
 
         stage('Update Deployment YAML') {
             steps {
+                // بنعدل الملف باستخدام المسار الكامل من الروت
                 sh """
-                sed -i 's|image:.*|image: ${DOCKER_IMAGE}:${IMAGE_TAG}|' ${DEPLOYMENT_FILE}
+                sed -i 's|image:.*|image: ${DOCKER_IMAGE}:${IMAGE_TAG}|' "${DEPLOYMENT_FILE}"
                 """
             }
         }
 
         stage('Deploy to Kubernetes') {
             steps {
-                sh "kubectl apply -f ${DEPLOYMENT_FILE}"
+                sh "kubectl apply -f '${DEPLOYMENT_FILE}'"
             }
         }
     }
