@@ -3,7 +3,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = "yourdockerhubusername/jenkins-app"
+        DOCKER_IMAGE = "abdelrahmannayf/jenkins-app"
         IMAGE_TAG = "${BUILD_NUMBER}"
         DEPLOYMENT_FILE = "CI-CD/lap 22/deployment.yaml"
     }
