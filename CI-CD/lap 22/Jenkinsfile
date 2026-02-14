@@ -4,8 +4,8 @@ pipeline {
     environment {
         DOCKER_IMAGE = "abdelrahmannayf/jenkins-app"
         IMAGE_TAG = "${BUILD_NUMBER}"
-        // المسار النسبي للملف من روت الريبو
-        DEPLOYMENT_FILE = "CI-CD/lap 22/deployment.yaml"
+        // استخدمت علامات تنصيص مفردة هنا عشان المسافة
+        DEPLOYMENT_FILE = 'CI-CD/lap 22/deployment.yaml'
     }
 
     tools {
@@ -15,6 +15,7 @@ pipeline {
     stages {
         stage('Run Unit Test') {
             steps {
+                // ضفت علامات تنصيص مفردة للمسار عشان المسافة اللي بين lap و 22
                 dir('CI-CD/lap 22') {
                     sh 'mvn test'
                 }
@@ -56,10 +57,8 @@ pipeline {
 
         stage('Update Deployment YAML') {
             steps {
-                // بنعدل الملف باستخدام المسار الكامل من الروت
-                sh """
-                sed -i 's|image:.*|image: ${DOCKER_IMAGE}:${IMAGE_TAG}|' "${DEPLOYMENT_FILE}"
-                """
+                // علامات التنصيص هنا مهمة جداً عشان المسافة
+                sh "sed -i 's|image:.*|image: ${DOCKER_IMAGE}:${IMAGE_TAG}|' '${DEPLOYMENT_FILE}'"
             }
         }
 
