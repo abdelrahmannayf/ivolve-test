@@ -13,43 +13,57 @@ pipeline {
 
         stage('RunUnitTest') {
             steps {
-                runUnitTest()
+                dir('CI-CD/lap23') {
+                    runUnitTest()
+                }
             }
         }
 
         stage('BuildApp') {
             steps {
-                buildApp()
+                dir('CI-CD/lap23') {
+                    buildApp()
+                }
             }
         }
 
         stage('BuildImage') {
             steps {
-                buildImage(DOCKER_IMAGE, TAG)
+                dir('CI-CD/lap23') {
+                    buildImage(DOCKER_IMAGE, TAG)
+                }
             }
         }
 
         stage('ScanImage') {
             steps {
-                scanImage(DOCKER_IMAGE, TAG)
+                dir('CI-CD/lap23') {
+                    scanImage(DOCKER_IMAGE, TAG)
+                }
             }
         }
 
         stage('PushImage') {
             steps {
-                pushImage(DOCKER_IMAGE, TAG)
+                dir('CI-CD/lap23') {
+                    pushImage(DOCKER_IMAGE, TAG)
+                }
             }
         }
 
         stage('RemoveImageLocally') {
             steps {
-                sh "docker rmi ${DOCKER_IMAGE}:${TAG}"
+                dir('CI-CD/lap23') {
+                    sh "docker rmi ${DOCKER_IMAGE}:${TAG}"
+                }
             }
         }
 
         stage('DeployOnK8s') {
             steps {
-                deployOnK8s(DOCKER_IMAGE, TAG, NAMESPACE)
+                dir('CI-CD/lap23') {
+                    deployOnK8s(DOCKER_IMAGE, TAG, NAMESPACE)
+                }
             }
         }
     }
