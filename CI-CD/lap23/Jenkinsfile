@@ -1,0 +1,68 @@
+@Library('shared-lib') _
+
+pipeline {
+    agent { label 'docker-agent' }
+
+    environment {
+        DOCKER_IMAGE = "abdelrahmannayf/jenkins-app"
+        TAG = "${BUILD_NUMBER}"
+        NAMESPACE = "dev"
+    }
+
+    stages {
+
+        stage('RunUnitTest') {
+            steps {
+                runUnitTest()
+            }
+        }
+
+        stage('BuildApp') {
+            steps {
+                buildApp()
+            }
+        }
+
+        stage('BuildImage') {
+            steps {
+                buildImage(DOCKER_IMAGE, TAG)
+            }
+        }
+
+        stage('ScanImage') {
+            steps {
+                scanImage(DOCKER_IMAGE, TAG)
+            }
+        }
+
+        stage('PushImage') {
+            steps {
+                pushImage(DOCKER_IMAGE, TAG)
+            }
+        }
+
+        stage('RemoveImageLocally') {
+            steps {
+                sh "docker rmi ${DOCKER_IMAGE}:${TAG}"
+            }
+        }
+
+        stage('DeployOnK8s') {
+            steps {
+                deployOnK8s(DOCKER_IMAGE, TAG, NAMESPACE)
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline Finished'
+        }
+        success {
+            echo 'Deployment Successful'
+        }
+        failure {
+            echo 'Pipeline Failed'
+        }
+    }
+}
