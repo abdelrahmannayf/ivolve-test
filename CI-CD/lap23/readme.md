@@ -1,5 +1,5 @@
 ![](screenshots/23.png)
-![](screenshots/231.png)![](screenshots/230.png)![](screenshots/232.png)
+![](screenshots/231.png)![](screenshots/00.png)![](screenshots/232.png)
 # Jenkins CI/CD Pipeline - Lab 23
 
 ## وصف المشروع
