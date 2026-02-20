@@ -4,8 +4,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = "abdelrahmannayf/jenkins-app"
         IMAGE_TAG = "${BUILD_NUMBER}"
-        // استخدمت علامات تنصيص مفردة هنا عشان المسافة
-        DEPLOYMENT_FILE = 'CI-CD/lap 22/deployment.yaml'
+        DEPLOYMENT_FILE = 'CI-CD/lap 25/deployment.yaml'
     }
 
     tools {
@@ -13,10 +12,10 @@ pipeline {
     }
 
     stages {
+
         stage('Run Unit Test') {
             steps {
-                // ضفت علامات تنصيص مفردة للمسار عشان المسافة اللي بين lap و 22
-                dir('CI-CD/lap 22') {
+                dir('CI-CD/lap 25') {
                     sh 'mvn test'
                 }
             }
@@ -24,7 +23,7 @@ pipeline {
 
         stage('Build App') {
             steps {
-                dir('CI-CD/lap 22') {
+                dir('CI-CD/lap 25') {
                     sh 'mvn clean package -DskipTests'
                 }
             }
@@ -32,7 +31,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                dir('CI-CD/lap 22') {
+                dir('CI-CD/lap 25') {
                     sh "docker build -t ${DOCKER_IMAGE}:${IMAGE_TAG} ."
                 }
             }
@@ -57,14 +56,23 @@ pipeline {
 
         stage('Update Deployment YAML') {
             steps {
-                // علامات التنصيص هنا مهمة جداً عشان المسافة
                 sh "sed -i 's|image:.*|image: ${DOCKER_IMAGE}:${IMAGE_TAG}|' '${DEPLOYMENT_FILE}'"
             }
         }
 
-        stage('Deploy to Kubernetes') {
+        stage('Commit & Push Changes to GitHub') {
             steps {
-                sh "kubectl apply -f '${DEPLOYMENT_FILE}'"
+                withCredentials([usernamePassword(credentialsId: 'github-cred', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
+                    sh """
+                    git config user.email "jenkins@example.com"
+                    git config user.name "Jenkins"
+
+                    git add ${DEPLOYMENT_FILE}
+                    git commit -m "Update image to ${IMAGE_TAG}" || echo "No changes to commit"
+
+                    git push https://\$GIT_USER:\$GIT_PASS@github.com/abdelrahmannayf/ivolve-test.git HEAD:main
+                    """
+                }
             }
         }
     }
@@ -74,10 +82,10 @@ pipeline {
             echo "Pipeline Finished."
         }
         success {
-            echo "Deployment Succeeded 🚀"
+            echo "GitOps Update Completed 🚀"
         }
         failure {
-            echo "Deployment Failed ❌"
+            echo "Pipeline Failed ❌"
         }
     }
 }
