@@ -4,6 +4,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = "abdelrahmannayf/jenkins-app"
         IMAGE_TAG = "${BUILD_NUMBER}"
+        // المتغير ده جواه مسافة 'CI-CD/lap 25/...'
         DEPLOYMENT_FILE = 'CI-CD/lap 25/deployment.yaml'
     }
 
@@ -12,10 +13,10 @@ pipeline {
     }
 
     stages {
-
         stage('Run Unit Test') {
             steps {
-                dir('CI-CD/lap 25') {
+                // ضفنا دبل كوتس هنا برضه للأمان
+                dir("CI-CD/lap 25") {
                     sh 'mvn test'
                 }
             }
@@ -23,7 +24,7 @@ pipeline {
 
         stage('Build App') {
             steps {
-                dir('CI-CD/lap 25') {
+                dir("CI-CD/lap 25") {
                     sh 'mvn clean package -DskipTests'
                 }
             }
@@ -31,7 +32,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                dir('CI-CD/lap 25') {
+                dir("CI-CD/lap 25") {
                     sh "docker build -t ${DOCKER_IMAGE}:${IMAGE_TAG} ."
                 }
             }
@@ -56,7 +57,8 @@ pipeline {
 
         stage('Update Deployment YAML') {
             steps {
-                sh "sed -i 's|image:.*|image: ${DOCKER_IMAGE}:${IMAGE_TAG}|' '${DEPLOYMENT_FILE}'"
+                // هنا استخدمنا السنجل كوتس بره والدبل كوتس جوه عشان الـ Path يتفهم صح
+                sh "sed -i 's|image:.*|image: ${DOCKER_IMAGE}:${IMAGE_TAG}|' \"${DEPLOYMENT_FILE}\""
             }
         }
 
@@ -67,7 +69,9 @@ pipeline {
                     git config user.email "jenkins@example.com"
                     git config user.name "Jenkins"
 
-                    git add ${DEPLOYMENT_FILE}
+                    # التعديل الجوهري هنا: حطينا المسار بين دبل كوتس
+                    git add "${DEPLOYMENT_FILE}"
+                    
                     git commit -m "Update image to ${IMAGE_TAG}" || echo "No changes to commit"
 
                     git push https://\$GIT_USER:\$GIT_PASS@github.com/abdelrahmannayf/ivolve-test.git HEAD:main
