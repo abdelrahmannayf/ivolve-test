@@ -1,6 +1,6 @@
 
 
-![Install Ansible](Screenshots/2611.png)
+![Install Ansible](Screenshots/261.png)
 ![Install Ansible](Screenshots/260.png)
 ![Install Ansible](Screenshots/26.png)
 🚀 Lab 26 — Ansible Initial Configuration and Ad-Hoc Execution
