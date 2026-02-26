@@ -1,5 +1,5 @@
 ![1](screenshots/28.png)
-![1](screenshots/280.png)
+![2](screenshots/280.png)
 🚀 Lab 28 — Structured Configuration Management Using Ansible Roles
 📌 Overview
 
