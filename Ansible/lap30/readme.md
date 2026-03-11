@@ -1,5 +1,5 @@
 ![](screenshots/30.png)
-![](screenshots/31.png)
+![](screenshots/301.png)
 # 🚀 Lab 30 – Automated Host Discovery with Ansible Dynamic Inventory
 
 ## 📌 Overview
