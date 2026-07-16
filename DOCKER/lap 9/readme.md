@@ -62,4 +62,38 @@ docker login
 # 1️⃣1️⃣ Push image
 docker push YOUR_DOCKERHUB_USERNAME/ivolve-app:latest
 ![lap 9](Screenshots/lap91.jpg)
+version: "3.8"
 
+services:
+
+  db:
+    image: mysql:8.0
+    container_name: mysql_db
+
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ivolve
+
+    volumes:
+      - db_data:/var/lib/mysql
+
+    ports:
+      - "3306:3306"
+
+  app:
+    build: .
+    container_name: node_app
+
+    ports:
+      - "3000:3000"
+
+    environment:
+      DB_HOST: db
+      DB_USER: root
+      DB_PASSWORD: root
+
+    depends_on:
+      - db
+
+volumes:
+  db_data:
